@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <div class="navbar navbar-dark bg-dark navbar-expand-md mb-5 p-2">
+        <a href="{% url 'home' %}" class="navbar-brand">Logo</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+            </li>
+            {% if request.user.is_authenticated %}
+                <li>
+                    <a href="{% url 'blog:profile' %}" class="nav-link">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'blog:post' %}" class="nav-link">POST</a>
+                </li>
+            {% endif  %}
+        </ul>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="menu">
+            <ul class="navbar-nav ml-auto mr-5">
+                {% if not request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'blog:login' %}" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'blog:signup' %}" class="nav-link">Signup</a>
+                    </li>
+                {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'blog:changepwd' %}" class="nav-link">Changepassword</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'blog:logout' %}" class="nav-link">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">About</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock  %}
+{% block b1 %}
+    {% for i in pageobj.object_list %}
+        <div class="container-fluid">
+            <div class="row">
+                <h4 class="alert alert-primary col-sm-8">{{i.title}}</h4>
+                <h5 class="alert alert-primary col-sm-2"><i>{{user}}</i></h5>
+                <h6 class="alert alert-primary col-sm-2"><i>date</i></h6>
+            </div>
+        </div>
+        <i>{{i.description}}</i>
+    {% endfor  %}
+
+    <div class="text-center">
+        {% if pageobj.has_previous %}
+            <a href="{% url 'home' %}?page={{pageobj.previous_page_number}} " class="btn btn-primary">Previous Page</a>
+        {% endif  %}
+    
+        {% if pageobj.has_next %}
+            <a href="{% url 'home' %}?page={{pageobj.next_page_number}}" class="btn btn-primary">Next Page</a>
+        {% endif  %}
+    </div>
+{% endblock  %} 
